@@ -3,10 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Task;
+use AppBundle\Entity\User;
 use AppBundle\Form\TaskType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class TaskController extends Controller
 {
@@ -15,7 +17,8 @@ class TaskController extends Controller
      */
     public function listAction()
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('AppBundle:Task')->findAll()]);
+        return $this->render('task/list.html.twig',
+            ['tasks' => $this->getDoctrine()->getRepository('AppBundle:Task')->findAll()]);
     }
 
     /**
@@ -25,6 +28,8 @@ class TaskController extends Controller
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
+        $user = $this->getUser();
+        $task->setUser($user);
 
         $form->handleRequest($request);
 
@@ -83,12 +88,54 @@ class TaskController extends Controller
      */
     public function deleteTaskAction(Task $task)
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($task);
-        $em->flush();
+        //Id of the current user
+        $usr = $this->get('security.token_storage')
+                    ->getToken()
+                    ->getUser()
+                    ->getId();
 
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
+        //Id of the user who created the related task
+        $iduser = $task->getUser()
+                       ->getId();
+
+        //Assign the Id of the anonyme user in  "user" table
+        $anonymuser = 2;
+
+        //Test first whether the task related user is linked to anonyme user
+        if($iduser == $anonymuser){
+
+            //Test whether the user has the right role to delete that task
+            if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($task);
+                $em->flush();
+
+                $this->addFlash('success', 'La tâche a bien été supprimée.');
+
+                return $this->redirectToRoute('task_list');
+            }
+            //When the user is not an admin and is trying to delete the task linked to an anonym user then he is redirected with an error
+            $this->addFlash('error', sprintf('La tâche %s ne peut être supprimée que part un Administrateur', $task->getTitle()));
+
+            return $this->redirectToRoute('task_list');
+
+            //Test if the current user is the user who created that task that is trying to delete
+        } elseif($usr == $iduser){
+
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($task);
+            $em->flush();
+
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
+
+            return $this->redirectToRoute('task_list');
+
+        }
+        //added as part of the control implementation
+        $this->addFlash('error', sprintf('La tâche %s ne peut être supprimée que part le user qui l\' a crée.', $task->getTitle()));
 
         return $this->redirectToRoute('task_list');
+
     }
 }
