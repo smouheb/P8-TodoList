@@ -60,6 +60,7 @@
       <path value="$PROJECT_DIR$/vendor/behat/mink-browserkit-driver" />
       <path value="$PROJECT_DIR$/vendor/psr/http-message" />
       <path value="$PROJECT_DIR$/vendor/behat/mink" />
+      <path value="$PROJECT_DIR$/vendor/behat/symfony2-extension" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
