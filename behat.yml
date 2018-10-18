@@ -9,3 +9,11 @@ default:
         default:
             contexts:
                 - FeatureContext
+
+            paths: [%paths.base%/features/tasks]
+
+        tasksallocation:
+            contexts:
+                - TaskAllocationContext
+
+            paths: [%paths.base%/features/taskallocation]

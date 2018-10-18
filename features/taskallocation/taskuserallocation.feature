@@ -17,6 +17,7 @@ Feature: User allocated to a task
     And I fill in "task_title" with "<title>"
     And I fill in "task_content" with "<content>"
     And I press "Ajouter"
+    Then | I should see the id of the "<username>" in the database
 
   Examples:
     |username   |password|title     |content                   |

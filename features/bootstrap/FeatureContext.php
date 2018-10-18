@@ -43,7 +43,8 @@ class FeatureContext extends MinkContext implements Context
     public function tasksForE2eTesting()
     {
 
-        $test = Yaml::parse(file_get_contents(__DIR__.'/tasks.yml'));
+        $test = Yaml::parse(file_get_contents(__DIR__ . '/tasks.yml'));
+
 
         foreach ($test as $key => $value){
 
