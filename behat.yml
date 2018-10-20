@@ -17,3 +17,9 @@ default:
                 - TaskAllocationContext
 
             paths: [%paths.base%/features/taskallocation]
+
+        usercreation:
+                contexts:
+                    - UserContext
+
+                paths: [%paths.base%/features/user]
