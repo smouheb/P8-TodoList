@@ -7,6 +7,7 @@ use AppBundle\Form\TaskType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class TaskController extends Controller
 {
@@ -24,7 +25,9 @@ class TaskController extends Controller
      */
     public function createAction(Request $request)
     {
+
         $task = new Task();
+
         $form = $this->createForm(TaskType::class, $task);
         $user = $this->getUser();
 
@@ -41,6 +44,7 @@ class TaskController extends Controller
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
 
             return $this->redirectToRoute('task_list');
+
         }
 
         return $this->render('task/create.html.twig', ['form' => $form->createView()]);
