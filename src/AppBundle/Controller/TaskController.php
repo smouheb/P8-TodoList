@@ -7,7 +7,6 @@ use AppBundle\Form\TaskType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Stopwatch\Stopwatch;
 
 class TaskController extends Controller
 {
@@ -118,7 +117,7 @@ class TaskController extends Controller
 
                 return $this->redirectToRoute('task_list');
             }
-            //When the user is not an admin and is trying to delete the task linked to an anonym user then he is redirected with an error
+            //When the user is not an admin and is trying to delete the task linked to an anonyme user then he is redirected with an error
             $this->addFlash('error', sprintf('La tâche %s ne peut être supprimée que part un Administrateur', $task->getTitle()));
 
             return $this->redirectToRoute('task_list');
