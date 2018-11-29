@@ -4,6 +4,10 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    _defaults:
+         autowire: true
+         autoconfigure: true
+
+    app.control_user:
+      class: AppBundle\Security\UserControl
+      arguments: ['@security.authorization_checker', '@security.token_storage']

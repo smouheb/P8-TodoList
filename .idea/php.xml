@@ -69,11 +69,14 @@
       <path value="$PROJECT_DIR$/vendor/sebastian/environment" />
       <path value="$PROJECT_DIR$/vendor/sebastian/code-unit-reverse-lookup" />
       <path value="$PROJECT_DIR$/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/vendor/fig/link-util" />
+      <path value="$PROJECT_DIR$/vendor/psr/link" />
+      <path value="$PROJECT_DIR$/vendor/psr/simple-cache" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter home="$USER_HOME$/Library/Caches/PhpStorm2018.2/plugins/idea-php-latest-plugin/php-v7.2.11/php.sh" id="d158a610-3161-4bba-8458-ce5eb3861b8f" name="PHP latest" debugger_id="php.debugger.XDebug" />
+      <interpreter home="$USER_HOME$/Library/Caches/PhpStorm2018.2/plugins/idea-php-latest-plugin/php-v7.2.12/php.sh" id="1223741d-0e22-494b-b45e-3d5ca690ea86" name="PHP latest" debugger_id="php.debugger.XDebug" />
     </interpreters>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="5.5.0" />

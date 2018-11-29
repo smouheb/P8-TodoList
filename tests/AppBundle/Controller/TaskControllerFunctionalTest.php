@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle\Controller;
 
-use AppBundle\Controller\TaskController;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TaskControllerFunctionalTest extends WebTestCase
