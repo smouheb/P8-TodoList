@@ -34,24 +34,22 @@ class UserControl
         if($this->tokenStorage->getToken() instanceof AnonymousToken){
 
             return $this->usrrole[3];
+
         }
 
         $this->usr = $this->tokenStorage->getToken()->getUser()->getId();
 
         if($iduser == self::ANONYMUSER){
 
-            if($this->authorizationchecker->isGranted('ROLE_ADMIN'))
-            {
+            if($this->authorizationchecker->isGranted('ROLE_ADMIN')) {
+
                 return $this->usrrole[0];
             }
-
             return $this->usrrole[2];
 
         } elseif($this->usr == $iduser){
 
-
             return $this->usrrole[1];
-
         }
 
         return $this->usrrole[3];
