@@ -17,7 +17,7 @@ class UserControl
     private $usr;
     private $authorizationchecker;
     private $tokenStorage;
-    private $usrrole = ['owner', 'unknownadmin', 'unknownuser'];
+    private $usrrole = ['owner', 'unknownadmin', 'unknownuser', 'connected'];
 
     const ANONYMUSER = 2;
 
@@ -31,7 +31,7 @@ class UserControl
     public function controlUserRights($iduser)
     {
         //Test whether it is not an anonymous user who is trying to delete a task
-        if(!$this->tokenStorage->getToken() instanceof AnonymousToken){
+        if(!$this->tokenStorage->getToken() instanceof AnonymousToken && !is_null($iduser)){
 
             $this->usr = $this->tokenStorage->getToken()->getUser()->getId();
 
@@ -48,8 +48,17 @@ class UserControl
 
                 return $this->usrrole[0];
             }
-
         }
+        return $this->usrrole[2];
+    }
+
+    public function controlRightsForOtherActions($user)
+    {
+        //Test whether it is not an anonymous user who is trying to delete a task
+        if(!$this->tokenStorage->getToken() instanceof AnonymousToken && !is_null($user)){
+
+                return $this->usrrole[3];
+            }
 
         return $this->usrrole[2];
     }
