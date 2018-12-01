@@ -73,7 +73,7 @@ class FeatureContext extends MinkContext implements Context
             ->set('t.user', 2)
             ->where('t.title between :param1 and :param2')
             ->setParameters([
-                'param1'=>'TestSma2',
+                'param1'=>'TestSma1',
                 'param2'=>'TestSma9',
             ])
             ->getQuery()
@@ -86,8 +86,6 @@ class FeatureContext extends MinkContext implements Context
             ->setParameter('param3','TestSma1')
             ->getQuery()
             ->execute();
-
-       //exit;
     }
 
     /**
@@ -104,7 +102,5 @@ class FeatureContext extends MinkContext implements Context
             ->setParameter('param3','TestSma1')
             ->getQuery()
             ->execute();
-
-        //exit;
     }
 }
