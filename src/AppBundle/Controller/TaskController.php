@@ -28,67 +28,51 @@ class TaskController extends Controller
      */
     public function createAction(Request $request)
     {
-        if($this->get('app.control_user')->controlRightsForOtherActions($this->getUser()) != self::UNKNOWNUSER){
+        $task = new Task();
+        $form = $this->createForm(TaskType::class, $task);
+        $user = $this->getUser();
 
-            $task = new Task();
-            $form = $this->createForm(TaskType::class, $task);
-            $user = $this->getUser();
+        $task->setUser($user);
+        $form->handleRequest($request);
 
-            $task->setUser($user);
-            $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($task);
+            $em->flush();
+            $this->addFlash('success', 'La tâche a été bien été ajoutée.');
+            return $this->redirectToRoute('task_list');
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($task);
-                $em->flush();
-                $this->addFlash('success', 'La tâche a été bien été ajoutée.');
-                return $this->redirectToRoute('task_list');
-
-            }
-            return $this->render('task/create.html.twig', ['form' => $form->createView()]);
         }
-        $this->addFlash('error', sprintf('La creation d\' une tache ne peut être effectué que par les utilisateurs connectés'));
-        return $this->redirectToRoute('login');
+        return $this->render('task/create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
-     * @Route("/tasks/{id}/edit", name="task_edit")
+     * @Route("/tasks/edit/{id}", name="task_edit")
      */
     public function editAction(Task $task, Request $request)
     {
-        if($this->get('app.control_user')->controlRightsForOtherActions($this->getUser()) != self::UNKNOWNUSER) {
+        $form = $this->createForm(TaskType::class, $task);
+        $form->handleRequest($request);
 
-            $form = $this->createForm(TaskType::class, $task);
-            $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($form->isSubmitted() && $form->isValid()) {
-
-                $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'La tâche a bien été modifiée.');
-                return $this->redirectToRoute('task_list');
-            }
-            return $this->render('task/edit.html.twig', ['form' => $form->createView(), 'task' => $task,]);
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'La tâche a bien été modifiée.');
+            return $this->redirectToRoute('task_list');
         }
-        $this->addFlash('error', sprintf('La tâche %s ne peut être modifié que par les utilisateurs connectés', $task->getTitle()));
-        return $this->redirectToRoute('task_list');
+        return $this->render('task/edit.html.twig', ['form' => $form->createView(), 'task' => $task]);
     }
 
     /**
-     * @Route("/tasks/{id}/toggle", name="task_toggle")
+     * @Route("/tasks/toggle/{id}", name="task_toggle")
      */
     public function toggleTaskAction(Task $task)
     {
-        if($this->get('app.control_user')->controlRightsForOtherActions($this->getUser()) != self::UNKNOWNUSER){
+        $task->toggle(!$task->isDone());
+        $this->getDoctrine()->getManager()->flush();
 
-            $task->toggle(!$task->isDone());
-            $this->getDoctrine()->getManager()->flush();
-
-            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
-            return $this->redirectToRoute('task_list');
-        }
-        $this->addFlash('error', sprintf('La tâche %s ne peut être modifié que par les utilisateurs connectés', $task->getTitle()));
-
+        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
         return $this->redirectToRoute('task_list');
     }
 
@@ -108,8 +92,7 @@ class TaskController extends Controller
 
              $this->addFlash('error', sprintf('La tâche %s ne peut être supprimée que part le user qui l\' a crée.', $task->getTitle()));
              return $this->redirectToRoute('task_list');
-         }
-
+        }
         $em = $this->getDoctrine()->getManager();
         $em->remove($task);
         $em->flush();

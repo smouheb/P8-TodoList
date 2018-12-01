@@ -21,7 +21,6 @@ Feature: Tasks management
 
   Scenario: Create a Task user not connected
     When I follow "Créer une nouvelle tâche"
-    And I should see "Oops"
     Then I am on "/login"
 
   Scenario: Edit Task
@@ -40,7 +39,7 @@ Feature: Tasks management
   Scenario: Edit Task user not connected
     When I am on "/tasks"
     Then I follow "TestSma1"
-    Then I should see "Oops"
+    Then I am on "/login"
 
   Scenario: list of all tasks
     When  I follow "Consulter la liste des tâches à faire"
@@ -105,4 +104,4 @@ Feature: Tasks management
   Scenario: Complete task user not connected
     Then I am on "/tasks"
     And I press "Marquer comme faite"
-    Then I should see "Oops !"
+    Then I am on "/login"
