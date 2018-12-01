@@ -17,7 +17,7 @@ class UserControl
     private $usr;
     private $authorizationchecker;
     private $tokenStorage;
-    private $usrrole = ['deleteadmin', 'deleterelateduser', 'unknownadmin', 'unknownuser'];
+    private $usrrole = ['owner', 'unknownadmin', 'unknownuser', 'connected'];
 
     const ANONYMUSER = 2;
 
@@ -31,30 +31,36 @@ class UserControl
     public function controlUserRights($iduser)
     {
         //Test whether it is not an anonymous user who is trying to delete a task
-        if($this->tokenStorage->getToken() instanceof AnonymousToken){
+        if(!$this->tokenStorage->getToken() instanceof AnonymousToken && !is_null($iduser)){
 
-            return $this->usrrole[3];
-        }
+            $this->usr = $this->tokenStorage->getToken()->getUser()->getId();
 
-        $this->usr = $this->tokenStorage->getToken()->getUser()->getId();
+            if($iduser == self::ANONYMUSER){
 
-        if($iduser == self::ANONYMUSER){
+                if($this->authorizationchecker->isGranted('ROLE_ADMIN')) {
 
-            if($this->authorizationchecker->isGranted('ROLE_ADMIN'))
-            {
+                    return $this->usrrole[0];
+                }
+
+                return $this->usrrole[1];
+
+            } elseif($this->usr == $iduser){
+
                 return $this->usrrole[0];
             }
-
-            return $this->usrrole[2];
-
-        } elseif($this->usr == $iduser){
-
-
-            return $this->usrrole[1];
-
         }
+        return $this->usrrole[2];
+    }
 
-        return $this->usrrole[3];
+    public function controlRightsForOtherActions($user)
+    {
+        //Test whether it is not an anonymous user who is trying to delete a task
+        if(!$this->tokenStorage->getToken() instanceof AnonymousToken && !is_null($user)){
+
+                return $this->usrrole[3];
+            }
+
+        return $this->usrrole[2];
     }
 
 }

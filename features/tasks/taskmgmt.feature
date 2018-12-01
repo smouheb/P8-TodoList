@@ -19,6 +19,11 @@ Feature: Tasks management
     And I press "Ajouter"
     Then I should see "La tâche a été bien été ajoutée."
 
+  Scenario: Create a Task user not connected
+    When I follow "Créer une nouvelle tâche"
+    And I should see "Oops"
+    Then I am on "/login"
+
   Scenario: Edit Task
     When I follow "Se connecter"
     And I fill in "Nom d'utilisateur" with "Smaeluser"
@@ -31,6 +36,11 @@ Feature: Tasks management
     And  I fill in "task_content" with "Test edit content"
     And I press "Modifier"
     Then I should see "La tâche a bien été modifiée."
+
+  Scenario: Edit Task user not connected
+    When I am on "/tasks"
+    Then I follow "TestSma1"
+    Then I should see "Oops"
 
   Scenario: list of all tasks
     When  I follow "Consulter la liste des tâches à faire"
@@ -83,6 +93,16 @@ Feature: Tasks management
     Then I should see "Oops"
 
   Scenario: Complete task
-    Given I am on "/tasks"
-    When I press "Marquer comme faite"
+    When I follow "Se connecter"
+    And I fill in "Nom d'utilisateur" with "Yo"
+    And I fill in "Mot de passe" with "1234"
+    And I press "Se connecter"
+    Then I should see "Se déconnecter"
+    When I am on "/tasks"
+    And I press "Marquer comme faite"
     Then I should see "Superbe !"
+
+  Scenario: Complete task user not connected
+    Then I am on "/tasks"
+    And I press "Marquer comme faite"
+    Then I should see "Oops !"
