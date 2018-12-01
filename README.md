@@ -18,10 +18,11 @@ Choose the directory where you want this project to be saved.
 or if you are using the command line, then go to the directory you want this project to be saved and copy paste the below:
 git clone https://github.com/smouheb/TodoList.git
 
-Once it is downloaded/saved, cd BileMo and then composer install.
+Once it is downloaded/saved, cd Todolist and then composer install.
 you will be asked to:
-- Add all the database information (hostname, port, databasename, usernanme, password...)
-- When the ins the following command to create a database (if not already existing):
+- Add the database information (hostname, port, databasename, usernanme, password...)
+
+When you are done use the following command to create a database (if not already existing):
     bin/console doctrine:database:create
     then bin/console doctrine:schema:create.
 
