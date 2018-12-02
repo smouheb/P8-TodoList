@@ -18,7 +18,6 @@ security:
             security: false
 
         main:
-            logout_on_user_change: true
             anonymous: ~
             pattern: ^/
             form_login:
@@ -30,9 +29,11 @@ security:
             logout:
                 path: /logout
                 target: /
+            logout_on_user_change: true
+            access_denied_url: /login
 
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/tasks/create, roles: ROLE_USER }
         - { path: ^/tasks/edit, roles: ROLE_USER }
         - { path: ^/tasks/toggle, roles: ROLE_USER }
