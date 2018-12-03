@@ -33,3 +33,7 @@ If you want to add additional tests running with behat, everything lives in the 
 Also, I have added fixtures so everytime you create change the source code you can use the existing tests as your regressioin tests.
 
 Hope you'll enjoy it!
+
+---
+> **note**: for running the tests don't forget to change the user's id, or usernanme to adapt it to your test users (or use the ones I have used in my scenarios) in the following classes "TaskAllocationContext" the constants have to be adapted accordingly (i.e. with the user id of the related users that will be created in the database)
+for class "FeatureContext"  change the user id in the following methods allocateRelatedUsers and  changeUserBeforeStep
