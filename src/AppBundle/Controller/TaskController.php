@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Task;
 use AppBundle\Form\TaskType;
+use AppBundle\Security\UserControl;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,16 +80,16 @@ class TaskController extends Controller
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTaskAction(Task $task)
+    public function deleteTaskAction(Task $task, UserControl $userControl)
     {
         $iduser = $task->getUser()->getId();
 
-         if ($this->get('app.control_user')->controlUserRights($iduser) == self::UNKNOWNADMIN){
+         if ($userControl->controlUserRights($iduser) == self::UNKNOWNADMIN){
 
              $this->addFlash('error', sprintf('La tâche %s ne peut être supprimée que part un Administrateur', $task->getTitle()));
              return $this->redirectToRoute('task_list');
 
-        } elseif ($this->get('app.control_user')->controlUserRights($iduser) == self::UNKNOWNUSER){
+        } elseif ($userControl->controlUserRights($iduser) == self::UNKNOWNUSER){
 
              $this->addFlash('error', sprintf('La tâche %s ne peut être supprimée que part le user qui l\' a crée.', $task->getTitle()));
              return $this->redirectToRoute('task_list');

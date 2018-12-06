@@ -8,6 +8,10 @@ services:
          autowire: true
          autoconfigure: true
 
-    app.control_user:
-      class: AppBundle\Security\UserControl
-      arguments: ['@security.authorization_checker', '@security.token_storage']
+    AppBundle\:
+        resource: '../../src/AppBundle/*'
+        exclude: '../../src/AppBundle/{DependencyInjection,Entity,Migrations,Tests}'
+
+    #app.control_user:
+     # class: AppBundle\Security\UserControl
+      #arguments: ['@security.authorization_checker', '@security.token_storage']

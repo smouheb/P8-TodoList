@@ -8,20 +8,23 @@
 
 namespace AppBundle\Security;
 
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class UserControl
 {
     private $usr;
     private $authorizationchecker;
     private $tokenStorage;
-    private $usrrole = ['owner', 'unknownadmin', 'unknownuser', 'connected'];
 
+    const OWNER = 'owner';
+    const UNKNOWNUSER = 'unknownuser';
+    const UNKNOWNADMIN = 'unknownadmin';
+    const CONNECTED = 'connected';
     const ANONYMUSER = 2;
 
-    public function __construct(AuthorizationChecker $authorizationchecker,TokenStorage $tokenStorage)
+    public function __construct(AuthorizationCheckerInterface $authorizationchecker,TokenStorageInterface $tokenStorage)
     {
         $this->authorizationchecker = $authorizationchecker;
         $this->tokenStorage = $tokenStorage;
@@ -39,17 +42,17 @@ class UserControl
 
                 if($this->authorizationchecker->isGranted('ROLE_ADMIN')) {
 
-                    return $this->usrrole[0];
+                    return self::OWNER;
                 }
 
-                return $this->usrrole[1];
+                return self::UNKNOWNADMIN;
 
             } elseif($this->usr == $iduser){
 
-                return $this->usrrole[0];
+                return self::OWNER;
             }
         }
-        return $this->usrrole[2];
+        return self::UNKNOWNUSER;
     }
 
     public function controlRightsForOtherActions($user)
@@ -57,10 +60,10 @@ class UserControl
         //Test whether it is not an anonymous user who is trying to delete a task
         if(!$this->tokenStorage->getToken() instanceof AnonymousToken && !is_null($user)){
 
-                return $this->usrrole[3];
+                return self::CONNECTED;
             }
 
-        return $this->usrrole[2];
+        return self::UNKNOWNUSER;
     }
 
 }
